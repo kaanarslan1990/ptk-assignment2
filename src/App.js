@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import Footer from "./components/Footer";
+import Form from "./components/Form";
+import Header from "./components/Header";
 
 function App() {
+  const [tasks, setTasks] = useState([
+    {
+      taskname: "Taste Javascript",
+    },
+    {
+      taskname: "Give talks",
+    },
+    {
+      taskname: "Write tutorials",
+    },
+    {
+      taskname: "Have a life!",
+    }
+  ]);
+
+  useEffect(() => {
+    console.log(tasks);
+  }, [tasks]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Form addTask={setTasks} tasks={tasks} />
+      <Footer />
     </div>
   );
 }
