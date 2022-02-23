@@ -1,34 +1,49 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import Footer from "./components/Footer";
-import Form from "./components/Form";
 import Header from "./components/Header";
+import Form from "./components/Form";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      taskname: "Taste Javascript",
-    },
-    {
-      taskname: "Give talks",
-    },
-    {
-      taskname: "Write tutorials",
-    },
-    {
-      taskname: "Have a life!",
-    }
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks]);
+  const filteredList =
+    activeCategory === "All"
+      ? tasks
+      : activeCategory === "Active"
+      ? tasks.filter((task) => task.isCompleted !== true)
+      : tasks.filter((task) => task.isCompleted !== false);
+
+  
+  const handleToggleCompleted = (id) => {
+    const updatedTask = tasks.find((task) => task.id === id);
+    updatedTask.isCompleted = !updatedTask.isCompleted;
+    const newTasks = tasks.map((task) => (task.id === id ? updatedTask : task));
+    setTasks(newTasks);
+  };
+
+  const handleDelete = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  
+  const handleClear = () => {
+    setTasks([]);
+  };
+
   return (
-    <div className="App">
-      <Header />
-      <Form addTask={setTasks} tasks={tasks} />
-      <Footer />
-    </div>
+    <section className="todoapp">
+      <Header setTasks={setTasks} tasks={tasks} />
+      <Form
+        filteredList={filteredList}
+        tasks={tasks}
+        handleToggleCompleted={handleToggleCompleted}
+        handleDelete={handleDelete}
+        setActiveCategory={setActiveCategory}
+        activeCategory={activeCategory}
+        handleClear={handleClear}
+      />
+    </section>
   );
 }
 
